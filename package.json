@@ -1,0 +1,25 @@
+{
+  "name": "@latestrev/node-client",
+  "version": "0.1.0",
+  "description": "LatestRev.com Node.js client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LatestRev/latestrev-node-client.git"
+  },
+  "keywords": [
+    "latestrev",
+    "cms",
+    "headless",
+    "json"
+  ],
+  "author": "LatestRev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LatestRev/latestrev-node-client/issues"
+  },
+  "homepage": "https://github.com/LatestRev/latestrev-node-client#readme"
+}
