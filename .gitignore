@@ -5,48 +5,5 @@
 # VS code settings
 .vscode
 
-# dev environment specific settings
-server/settings.dev.json
-
 # NodeJS modules
 node_modules
-
-# test data
-testdata/
-
-# Compiled files
-client/js/views/templates.js
-server/public/css/
-server/public/scripts/
-server/views/standalone/css/
-server/views/standalone/scripts/
-temp/
-tools/insiderloc/
-insider-site-strings.xml
-
-# CDN versions
-server/cdnVersions.json
-
-# snapshots & test data
-snapshots/
-
-# sync media files
-server/media/
-server/builds/
-server/geoip/
-
-# upload folder
-server/uploads/
-
-# test data
-server/testdata/
-server/public/testdata/
-
-# logs
-*.log
-logs/
-
-# cms cache
-cms/
-
-/backstop_data
