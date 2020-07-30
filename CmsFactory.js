@@ -19,11 +19,21 @@ class CmsFactory {
         );
 
         // if version hasn't changed, we are fine to continue using existing CMS instance
-        if (existingPublished && existingPublished.manifest.version === publishedVersion) {
+        if (
+            existingPublished &&
+            (existingPublished.manifest.version === publishedVersion || !publishedVersion)
+        ) {
             return existingPublished;
         }
 
-        var manifest = await this.source.getPublishedRelease(publishedVersion);
+        let manifest;
+        if (!publishedVersion) {
+            // handle new projects where nothing has been published
+            manifest = { collections: {}, media: {} };
+        } else {
+            manifest = await this.source.getPublishedRelease(publishedVersion);
+        }
+
         const snapshot = new CmsSnapshot(manifest, this.source);
         this._cache.set('published', snapshot);
         return snapshot;
