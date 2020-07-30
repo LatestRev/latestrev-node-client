@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/LatestRev/latestrev-node-client/issues"
   },
-  "homepage": "https://github.com/LatestRev/latestrev-node-client#readme"
+  "homepage": "https://github.com/LatestRev/latestrev-node-client#readme",
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
 }
