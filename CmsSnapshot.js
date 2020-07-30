@@ -19,6 +19,23 @@ class CmsSnapshot {
         this.cache = new MemoryCache();
     }
 
+    getMediaUrl(mediaInfo) {
+        if (
+            mediaInfo &&
+            typeof mediaInfo === 'object' &&
+            mediaInfo.libraryId &&
+            mediaInfo.fileId &&
+            mediaInfo.extension &&
+            this.manifest.media
+        ) {
+            const library = this.manifest.media[mediaInfo.libraryId];
+            if (library && library.publicUrl) {
+                return library.publicUrl + mediaInfo.fileId + '.' + mediaInfo.extension;
+            }
+        }
+        return null;
+    }
+
     async getItem(collectionId, itemId) {
         const collectionItemVersions = this.manifest.collections[collectionId];
         if (collectionItemVersions) {
