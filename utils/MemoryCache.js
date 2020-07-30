@@ -1,7 +1,7 @@
 var SingleOperation = require('./SingleOperation');
 
 class MemoryCache {
-    constructor({ defaultTTL = 5 * 60 * 1000, ttlByKey = {}, debug = false }) {
+    constructor({ defaultTTL = 5 * 60 * 1000, ttlByKey = {}, debug = false } = {}) {
         this.cache = {};
         this.singleOperation = new SingleOperation();
 
