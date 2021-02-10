@@ -7,14 +7,16 @@ class Express {
                 res.cookie('cms', 'saved', { path: '/' });
             }
 
+            // check for cookie if querystring wasn't provided
+            if (!cmsId && req.cookies && req.cookies.cms === 'saved') {
+                cmsId = 'saved';
+            }
+
+            req._latestRevCmsId = cmsId;
+
             // we don't want to fetch the CMS unless necessary so expose a helper
             req.getCms = async () => {
                 if (!req._latestRevCms) {
-                    // check for cookie if querystring wasn't provided
-                    if (!cmsId && req.cookies && req.cookies.cms === 'saved') {
-                        cmsId = 'saved';
-                    }
-
                     let manifest = null;
                     if (cmsId === 'saved') {
                         req._latestRevCms = await cmsFactory.getSaved();
