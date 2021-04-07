@@ -50,11 +50,14 @@ class ProjectFileSource {
             const manifest = await this.source.getPublishedRelease(version);
             if (manifest) {
                 // pre-cache each collection in the manifest
+                // NOTE: we don't do collections in parallel to avoid too many concurrent requests
                 for (const [collectionId, itemVersions] of Object.entries(manifest.collections)) {
-                    // get cached versions of all items
-                    for (const [itemId, itemVersion] of Object.entries(itemVersions)) {
-                        await this.getItem(collectionId, itemId, itemVersion);
-                    }
+                    // get cached versions of all items in parallel
+                    await Promise.all(
+                        Object.entries(itemVersions).map(([itemId, itemVersion]) =>
+                            this.getItem(collectionId, itemId, itemVersion)
+                        )
+                    );
                 }
 
                 // ensure published manifest path exists

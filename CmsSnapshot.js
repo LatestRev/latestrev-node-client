@@ -55,15 +55,17 @@ class CmsSnapshot {
             return cachedItems;
         }
 
-        const items = [];
+        let items = [];
         const collectionItems = this.manifest.collections[collectionId];
         if (collectionItems) {
-            for (const itemId of Object.keys(collectionItems)) {
-                const item = await this.getItem(collectionId, itemId);
-                if (item) {
-                    items.push(item);
-                }
-            }
+            // fetch items in parallel
+            const itemIds = Object.keys(collectionItems);
+            const fetchedItems = await Promise.all(
+                itemIds.map(itemId => this.getItem(collectionId, itemId))
+            );
+
+            // remove any empty items
+            items = fetchedItems.filter(item => !!item);
             this._collectionsCache[collectionId] = items;
         }
 

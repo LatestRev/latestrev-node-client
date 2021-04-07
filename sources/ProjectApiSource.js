@@ -5,7 +5,7 @@ class ProjectClient {
         projectId,
         apiUrl = 'https://latestrev.com/api/v1/',
         apiKey,
-        timeout = 10000 /* 10 secs */,
+        timeout = 20000 /* 20 secs */,
     }) {
         if (!projectId) {
             throw new Error('Missing project id');
