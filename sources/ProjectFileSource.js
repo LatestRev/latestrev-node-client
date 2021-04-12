@@ -42,7 +42,13 @@ class ProjectFileSource {
         const manifestPath = path.join(this.cachePath, 'published', `${version}.json`);
         const json = await fsp.readFile(manifestPath).catch(err => null);
         if (json) {
-            return JSON.parse(json);
+            try {
+                return JSON.parse(json);
+            } catch (error) {
+                console.error('error parsing manifest json at path: ' + manifestPath);
+                console.error(error);
+                // suppress error because we can refetch the file and save.
+            }
         }
 
         // next fallback to source
@@ -93,7 +99,13 @@ class ProjectFileSource {
         // first check the file cache
         const json = await fsp.readFile(itemPath).catch(err => null);
         if (json) {
-            return JSON.parse(json);
+            try {
+                return JSON.parse(json);
+            } catch (error) {
+                console.error('error parsing item json at path: ' + itemPath);
+                console.error(error);
+                // suppress error because we can refetch the file and save.
+            }
         }
 
         // next fallback to source
