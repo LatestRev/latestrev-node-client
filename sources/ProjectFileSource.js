@@ -1,6 +1,9 @@
-const axios = require('axios');
 const fsp = require('fs').promises;
 const path = require('path');
+const chunkArray = require('../utils/chunkArray');
+
+// limit concurrency in parallel api calls
+const PARALLEL_API_CALL_LIMIT = 25;
 
 class ProjectFileSource {
     constructor(cachePath, fallbackSource) {
@@ -58,12 +61,17 @@ class ProjectFileSource {
                 // pre-cache each collection in the manifest
                 // NOTE: we don't do collections in parallel to avoid too many concurrent requests
                 for (const [collectionId, itemVersions] of Object.entries(manifest.collections)) {
-                    // get cached versions of all items in parallel
-                    await Promise.all(
-                        Object.entries(itemVersions).map(([itemId, itemVersion]) =>
-                            this.getItem(collectionId, itemId, itemVersion)
-                        )
-                    );
+                    for (const idVersionPairs of chunkArray(
+                        Object.entries(itemVersions),
+                        PARALLEL_API_CALL_LIMIT
+                    )) {
+                        // get cached versions for set of items in parallel
+                        await Promise.all(
+                            idVersionPairs.map(([itemId, itemVersion]) =>
+                                this.getItem(collectionId, itemId, itemVersion)
+                            )
+                        );
+                    }
                 }
 
                 // ensure published manifest path exists

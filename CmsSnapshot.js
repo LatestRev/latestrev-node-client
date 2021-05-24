@@ -1,5 +1,8 @@
-const axios = require('axios');
 const MemoryCache = require('./utils/MemoryCache');
+const chunkArray = require('./utils/chunkArray');
+
+// limit concurrency in parallel api calls
+const PARALLEL_API_CALL_LIMIT = 25;
 
 class CmsSnapshot {
     constructor(manifest, source) {
@@ -60,9 +63,14 @@ class CmsSnapshot {
         if (collectionItems) {
             // fetch items in parallel
             const itemIds = Object.keys(collectionItems);
-            const fetchedItems = await Promise.all(
-                itemIds.map(itemId => this.getItem(collectionId, itemId))
-            );
+
+            let fetchedItems = [];
+            for (const idChunks of chunkArray(itemIds, PARALLEL_API_CALL_LIMIT)) {
+                const chunkItems = await Promise.all(
+                    idChunks.map(itemId => this.getItem(collectionId, itemId))
+                );
+                fetchedItems = fetchedItems.concat(chunkItems);
+            }
 
             // remove any empty items
             items = fetchedItems.filter(item => !!item);
