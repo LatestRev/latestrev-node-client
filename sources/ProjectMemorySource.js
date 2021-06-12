@@ -1,14 +1,13 @@
-const axios = require('axios');
-const fsp = require('fs').promises;
-const path = require('path');
+const MemoryCache = require('../utils/MemoryCache');
+const cloneDeep = require('lodash.clonedeep');
 
 class ProjectMemorySource {
     constructor(fallbackSource) {
         this.source = fallbackSource;
 
         this._publishedReleaseVersion = null;
-        this._itemCache = {};
-        this._manifestCache = {};
+        this._itemCache = new MemoryCache({ defaultTTL: Number.MAX_SAFE_INTEGER });
+        this._manifestCache = new MemoryCache({ defaultTTL: Number.MAX_SAFE_INTEGER });
     }
 
     async getPublishedReleaseVersion(ignoreCache) {
@@ -24,46 +23,34 @@ class ProjectMemorySource {
 
     async getPublishedRelease(version) {
         const cacheKey = version.toString();
-        const cachedManifest = this._manifestCache[cacheKey];
-        if (cachedManifest) {
-            return cachedManifest;
-        }
-
-        if (this.source) {
-            const manifest = await this.source.getPublishedRelease(version);
-            if (manifest) {
-                this._manifestCache[cacheKey] = manifest;
-                return manifest;
-            }
-        }
-
-        return null;
+        const manifest = await this._manifestCache.ensure(cacheKey, () => {
+            return this.source ? this.source.getPublishedRelease(version) : null;
+        });
+        // return a copy to make sure callers don't modify cached item
+        return cloneDeep(manifest);
     }
 
     async getScheduledRelease(scheduledId) {
+        // scheduled releases are mutable so just pass request to fallback source
         return this.source ? this.source.getScheduledRelease(scheduledId) : null;
     }
 
     async getSavedRelease() {
+        // current saved items are mutable so just pass request to fallback source
         return this.source ? this.source.getSavedRelease() : null;
     }
 
     async getItem(collectionId, itemId, itemVersion) {
         const cacheKey = `${collectionId}-${itemId}-${itemVersion}`;
-        const cachedItem = this._itemCache[cacheKey];
-        if (cachedItem) {
-            return cachedItem;
-        }
-
-        if (this.source) {
-            const item = await this.source.getItem(collectionId, itemId, itemVersion);
-            if (item) {
-                this._itemCache[cacheKey] = item;
-                return item;
+        const item = await this._itemCache.ensure(cacheKey, () => {
+            if (this.source) {
+                return this.source.getItem(collectionId, itemId, itemVersion);
             }
-        }
+            return null;
+        });
 
-        return null;
+        // return a copy to make sure callers don't modify cached item
+        return cloneDeep(item);
     }
 }
 

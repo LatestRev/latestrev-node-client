@@ -1,4 +1,3 @@
-const axios = require('axios');
 const MemoryCache = require('./utils/MemoryCache');
 const CmsSnapshot = require('./CmsSnapshot');
 

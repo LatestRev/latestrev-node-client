@@ -24,6 +24,7 @@ class ProjectClient {
     }
 
     async _apiGetRequest(url) {
+        //console.log(`RevAPI: ` + url);
         return this.apiClient.get(url, {
             params: {
                 apiKey: this.apiKey,

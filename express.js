@@ -17,7 +17,6 @@ class Express {
             // we don't want to fetch the CMS unless necessary so expose a helper
             req.getCms = async () => {
                 if (!req._latestRevCms) {
-                    let manifest = null;
                     if (cmsId === 'saved') {
                         req._latestRevCms = await cmsFactory.getSaved();
                     } else if (cmsId) {
