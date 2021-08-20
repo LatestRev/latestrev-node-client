@@ -1,11 +1,13 @@
 const axios = require('axios');
+const KeepAliveAgent = require('agentkeepalive');
+const KeepAliveHttpsAgent = require('agentkeepalive').HttpsAgent;
 
 class ProjectClient {
     constructor({
         projectId,
         apiUrl = 'https://latestrev.com/api/v1/',
         apiKey,
-        timeout = 20000 /* 20 secs */,
+        timeout = 60000 /* 60 secs */,
     }) {
         if (!projectId) {
             throw new Error('Missing project id');
@@ -20,6 +22,8 @@ class ProjectClient {
         this.apiClient = axios.create({
             baseURL: apiUrl + 'projects/' + this.projectId + '/',
             timeout: timeout,
+            httpAgent: new KeepAliveAgent(),
+            httpsAgent: new KeepAliveHttpsAgent(),
         });
     }
 

@@ -25,6 +25,7 @@ class CmsFactory {
             return existingPublished;
         }
 
+        const startTime = Date.now();
         let manifest;
         if (!publishedVersion) {
             // handle new projects where nothing has been published
@@ -35,6 +36,10 @@ class CmsFactory {
 
         const snapshot = new CmsSnapshot(manifest, this.source);
         this._cache.set('published', snapshot);
+
+        const elapsedSeconds = Math.round((Date.now() - startTime) / 1000);
+        console.log(`fetched published CMS content: ${snapshot.id} in ${elapsedSeconds} secs.`);
+
         return snapshot;
     }
 
