@@ -24,7 +24,7 @@
   "homepage": "https://github.com/LatestRev/latestrev-node-client#readme",
   "dependencies": {
     "agentkeepalive": "^4.1.4",
-    "axios": "^0.21.1",
+    "axios": "^0.24.0",
     "lodash.clonedeep": "^4.5.0"
   }
 }
