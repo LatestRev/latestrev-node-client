@@ -38,7 +38,11 @@ class MemoryCache {
             return Promise.resolve(entry.value);
         } else if (allowLazyRefresh) {
             // refresh in background, return expired result
-            refreshValue(entry.value);
+            refreshValue(entry.value).catch(error => {
+                // log but suppress any errors because they happen on a background thread
+                console.error('Error refreshing cache value: ' + key);
+                console.error(error);
+            });
             return Promise.resolve(entry.value);
         } else {
             // refresh and wait
