@@ -1,4 +1,5 @@
 const axios = require('axios');
+const axiosRetry = require('axios-retry');
 const KeepAliveAgent = require('agentkeepalive');
 const KeepAliveHttpsAgent = require('agentkeepalive').HttpsAgent;
 
@@ -7,7 +8,9 @@ class ProjectClient {
         projectId,
         apiUrl = 'https://latestrev.com/api/v1/',
         apiKey,
-        timeout = 60000 /* 60 secs */,
+        timeout = 20000 /* 20 secs */,
+        retries = 3,
+        maxSockets = 25,
     }) {
         if (!projectId) {
             throw new Error('Missing project id');
@@ -22,9 +25,10 @@ class ProjectClient {
         this.apiClient = axios.create({
             baseURL: apiUrl + 'projects/' + this.projectId + '/',
             timeout: timeout,
-            httpAgent: new KeepAliveAgent(),
-            httpsAgent: new KeepAliveHttpsAgent(),
+            httpAgent: new KeepAliveAgent({ maxSockets }),
+            httpsAgent: new KeepAliveHttpsAgent({ maxSockets }),
         });
+        axiosRetry(axios, { retries: retries, retryDelay: axiosRetry.exponentialDelay });
     }
 
     async _apiGetRequest(url) {
