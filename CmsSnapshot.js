@@ -1,4 +1,4 @@
-const MemoryCache = require('./utils/MemoryCache');
+const { MemoryCache } = require('@thinkpixellab-public/px-long-operations');
 const chunkArray = require('./utils/chunkArray');
 
 // limit concurrency in parallel api calls

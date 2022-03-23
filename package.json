@@ -25,6 +25,7 @@
   "dependencies": {
     "agentkeepalive": "^4.1.4",
     "axios": "^0.24.0",
+    "@thinkpixellab-public/px-long-operations": "^1.0.0",
     "axios-retry": "^3.2.4",
     "lodash.clonedeep": "^4.5.0"
   }
