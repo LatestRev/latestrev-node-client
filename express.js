@@ -1,15 +1,12 @@
 class Express {
     static createMiddleware(cmsFactory) {
         const middleware = (req, res, next) => {
-            // set a cookie for live mode so subsequent requests don't need a querystring
-            var cmsId = req.query.cms;
-            if (cmsId === 'saved') {
-                res.cookie('cms', 'saved', { path: '/' });
-            }
+            // get id from either querystring, header, or cookie
+            var cmsId = req.query.cms || req.header('RevCms-Snapshot-Id') || req.cookies?.cms;
 
-            // check for cookie if querystring wasn't provided
-            if (!cmsId && req.cookies && req.cookies.cms === 'saved') {
-                cmsId = 'saved';
+            // set a cookie for live mode so subsequent requests don't need a querystring
+            if (cmsId === 'saved' && !req.cookies?.cms) {
+                res.cookie('cms', 'saved', { path: '/' });
             }
 
             req._latestRevCmsId = cmsId;
