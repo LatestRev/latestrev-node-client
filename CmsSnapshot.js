@@ -79,6 +79,35 @@ class CmsSnapshot {
 
         return items;
     }
+
+    async getLocalizedString(
+        collectionId,
+        itemId,
+        locale,
+        fallbackToSource = true,
+        fallbackToId = true
+    ) {
+        let result = null;
+
+        const entry = await this.getItem(collectionId, itemId);
+        if (entry) {
+            const localeEntry = entry[locale];
+            if (localeEntry?.selected) {
+                result = localeEntry[localeEntry.selected];
+            }
+
+            if (fallbackToSource && (result === null || result === undefined)) {
+                result = entry.source;
+            }
+        }
+
+        // fallback to loc-id if no entry was found
+        if (fallbackToId && (result === null || result === undefined)) {
+            return itemId;
+        }
+
+        return result;
+    }
 }
 
 module.exports = CmsSnapshot;
