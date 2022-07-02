@@ -108,6 +108,14 @@ class CmsSnapshot {
 
         return result;
     }
+
+    async getLocalizedLookup(locale, lookupEntry) {
+        if (!lookupEntry) {
+            return null;
+        }
+
+        return this.getLocalizedString(lookupEntry.collectionId, lookupEntry.itemId, locale);
+    }
 }
 
 module.exports = CmsSnapshot;
