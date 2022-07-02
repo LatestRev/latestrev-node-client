@@ -1,6 +1,6 @@
 {
   "name": "@latestrev/node-client",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "LatestRev.com Node.js client",
   "main": "index.js",
   "scripts": {
