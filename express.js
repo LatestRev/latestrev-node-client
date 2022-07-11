@@ -1,24 +1,30 @@
 class Express {
-    static createMiddleware(cmsFactory) {
+    static createMiddleware(cmsFactory, { allowNonPublished = true }) {
         const middleware = (req, res, next) => {
-            // get id from either querystring, header, or cookie
-            var cmsId = req.query.cms || req.header('RevCms-Snapshot-Id') || req.cookies?.cms;
+            if (allowNonPublished) {
+                // get id from either querystring, header, or cookie
+                var cmsId = req.query.cms || req.header('RevCms-Snapshot-Id') || req.cookies?.cms;
 
-            // set a cookie for live mode so subsequent requests don't need a querystring
-            if (cmsId === 'saved' && !req.cookies?.cms) {
-                res.cookie('cms', 'saved', { path: '/' });
+                // set a cookie for live mode so subsequent requests don't need a querystring
+                if (cmsId === 'saved' && !req.cookies?.cms) {
+                    res.cookie('cms', 'saved', { path: '/' });
+                }
+
+                req._latestRevCmsId = cmsId;
             }
-
-            req._latestRevCmsId = cmsId;
 
             // we don't want to fetch the CMS unless necessary so expose a helper
             req.getCms = async () => {
                 if (!req._latestRevCms) {
-                    if (cmsId === 'saved') {
-                        req._latestRevCms = await cmsFactory.getSaved();
-                    } else if (cmsId) {
-                        req._latestRevCms = await cmsFactory.getScheduled(cmsId);
-                    } else {
+                    if (allowNonPublished) {
+                        if (cmsId === 'saved') {
+                            req._latestRevCms = await cmsFactory.getSaved();
+                        } else if (cmsId) {
+                            req._latestRevCms = await cmsFactory.getScheduled(cmsId);
+                        }
+                    }
+
+                    if (!req._latestRevCms) {
                         req._latestRevCms = await cmsFactory.getPublished();
                     }
                 }
