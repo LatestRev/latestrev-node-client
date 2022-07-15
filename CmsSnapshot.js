@@ -110,11 +110,13 @@ class CmsSnapshot {
     }
 
     async getLocalizedLookup(locale, lookupEntry) {
-        if (!lookupEntry) {
-            return null;
+        // if a collectionId and itemId are found, lookup localized string
+        if (lookupEntry?.collectionId && lookupEntry?.itemId) {
+            return this.getLocalizedString(lookupEntry.collectionId, lookupEntry.itemId, locale);
         }
 
-        return this.getLocalizedString(lookupEntry.collectionId, lookupEntry.itemId, locale);
+        // otherwise use non-localized text if set
+        return lookupEntry?.text;
     }
 }
 
