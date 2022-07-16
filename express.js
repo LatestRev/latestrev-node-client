@@ -1,5 +1,5 @@
 class Express {
-    static createMiddleware(cmsFactory, { allowNonPublished = true }) {
+    static createMiddleware(cmsFactory, { allowNonPublished = true } = {}) {
         const middleware = (req, res, next) => {
             if (allowNonPublished) {
                 // get id from either querystring, header, or cookie
