@@ -39,6 +39,38 @@ class CmsSnapshot {
         return null;
     }
 
+    getMediaDetails(mediaInfo) {
+        if (
+            mediaInfo &&
+            typeof mediaInfo === 'object' &&
+            mediaInfo.libraryId &&
+            mediaInfo.fileId &&
+            mediaInfo.extension
+        ) {
+            const library = (this.manifest.media || {})[mediaInfo.libraryId];
+            const libraryPublicUrl = library?.publicUrl;
+
+            let publicUrl = (libraryPublicUrl || '') + mediaInfo.fileId + '.' + mediaInfo.extension;
+
+            const details = {
+                libraryPublicUrl,
+                libraryId: mediaInfo.libraryId,
+                extension: mediaInfo.extension,
+                fileId: mediaInfo.fileId,
+                publicUrl,
+            };
+
+            // add height and width (not always available)
+            if (mediaInfo.width && mediaInfo.height) {
+                details.width = mediaInfo.width;
+                details.height = mediaInfo.height;
+            }
+
+            return details;
+        }
+        return null;
+    }
+
     async getItem(collectionId, itemId) {
         const collectionItemVersions = this.manifest.collections[collectionId];
         if (collectionItemVersions) {
