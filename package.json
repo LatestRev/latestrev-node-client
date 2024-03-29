@@ -3,7 +3,6 @@
     "version": "0.5.12",
     "description": "LatestRev.com Node.js client",
     "main": "index.js",
-    "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
