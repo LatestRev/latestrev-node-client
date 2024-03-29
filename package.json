@@ -1,32 +1,32 @@
 {
-  "name": "@latestrev/node-client",
-  "version": "0.5.11",
-  "description": "LatestRev.com Node.js client",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LatestRev/latestrev-node-client.git"
-  },
-  "keywords": [
-    "latestrev",
-    "cms",
-    "headless",
-    "json"
-  ],
-  "author": "LatestRev",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/LatestRev/latestrev-node-client/issues"
-  },
-  "homepage": "https://github.com/LatestRev/latestrev-node-client#readme",
-  "dependencies": {
-    "@thinkpixellab-public/px-long-operations": "^1.0.0",
-    "agentkeepalive": "^4.2.1",
-    "axios": "^0.27.2",
-    "axios-retry": "^3.3.1",
-    "lodash.clonedeep": "^4.5.0"
-  }
+    "name": "@latestrev/node-client",
+    "version": "0.5.11",
+    "description": "LatestRev.com Node.js client",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LatestRev/latestrev-node-client.git"
+    },
+    "keywords": [
+        "latestrev",
+        "cms",
+        "headless",
+        "json"
+    ],
+    "author": "LatestRev",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/LatestRev/latestrev-node-client/issues"
+    },
+    "homepage": "https://github.com/LatestRev/latestrev-node-client#readme",
+    "dependencies": {
+        "@thinkpixellab-public/px-long-operations": "^2.0.0",
+        "agentkeepalive": "^4.3.0",
+        "axios": "^1.3.4",
+        "axios-retry": "^3.4.0"
+    }
 }

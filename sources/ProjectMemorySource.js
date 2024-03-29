@@ -1,5 +1,4 @@
 const { MemoryCache } = require('@thinkpixellab-public/px-long-operations');
-const cloneDeep = require('lodash.clonedeep');
 
 class ProjectMemorySource {
     constructor(fallbackSource) {
@@ -27,7 +26,7 @@ class ProjectMemorySource {
             return this.source ? this.source.getPublishedRelease(version) : null;
         });
         // return a copy to make sure callers don't modify cached item
-        return cloneDeep(manifest);
+        return structuredClone(manifest);
     }
 
     async getScheduledRelease(scheduledId) {
@@ -50,7 +49,7 @@ class ProjectMemorySource {
         });
 
         // return a copy to make sure callers don't modify cached item
-        return cloneDeep(item);
+        return structuredClone(item);
     }
 }
 
