@@ -13,14 +13,25 @@ module.exports = {
 
     Express: require('./express'),
 
-    createCmsFactory: function ({ projectId, apiUrl, apiKey, cachePath, publishedTTLSeconds }) {
+    createCmsFactory: function ({
+        projectId,
+        apiUrl,
+        apiKey,
+        cachePath,
+        writeCacheFile,
+        publishedTTLSeconds,
+    }) {
         const apiSource = new ProjectApiSource({
             projectId: projectId,
             apiUrl: apiUrl,
             apiKey: apiKey,
         });
 
-        const fileSource = new ProjectFileSource(cachePath, apiSource);
+        const fileSource = new ProjectFileSource({
+            cachePath,
+            fallbackSource: apiSource,
+            writeCacheFile,
+        });
         const memorySource = new ProjectMemorySource(fileSource);
         return new CmsFactory(memorySource, publishedTTLSeconds);
     },

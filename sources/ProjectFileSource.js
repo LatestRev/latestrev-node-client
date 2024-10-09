@@ -6,9 +6,21 @@ const chunkArray = require('../utils/chunkArray');
 const PARALLEL_API_CALL_LIMIT = 25;
 
 class ProjectFileSource {
-    constructor(cachePath, fallbackSource) {
+    constructor({ cachePath, fallbackSource, writeCacheFile }) {
         this.cachePath = cachePath;
         this.source = fallbackSource;
+
+        this.writeCacheFile = writeCacheFile || this.defaultWriteCacheFile;
+    }
+
+    async defaultWriteCacheFile(cacheRelativePath, data) {
+        // ensure the containing folder exists
+        const fullPath = path.join(this.cachePath, cacheRelativePath);
+        const folderPath = path.parse(fullPath).dir;
+        await fsp.mkdir(folderPath, { recursive: true });
+
+        // write the file to disk
+        await fsp.writeFile(fullPath, JSON.stringify(data, 4, 4), 'utf8');
     }
 
     async getPublishedReleaseVersion(ignoreCache) {
@@ -42,13 +54,14 @@ class ProjectFileSource {
     }
 
     async getPublishedRelease(version) {
-        const manifestPath = path.join(this.cachePath, 'published', `${version}.json`);
+        const cacheRelativePath = path.join('published', `${version}.json`);
+        const manifestPath = path.join(this.cachePath, cacheRelativePath);
         const json = await fsp.readFile(manifestPath).catch(err => null);
         if (json) {
             try {
                 return JSON.parse(json);
             } catch (error) {
-                console.error('error parsing manifest json at path: ' + manifestPath);
+                console.error('error parsing manifest json at path: ' + cacheRelativePath);
                 console.error(error);
                 // suppress error because we can refetch the file and save.
             }
@@ -74,13 +87,7 @@ class ProjectFileSource {
                     }
                 }
 
-                // ensure published manifest path exists
-                const publishedPath = path.join(this.cachePath, 'published');
-                await fsp.mkdir(publishedPath, { recursive: true });
-
-                // write manifest
-                const manifestPath = path.join(publishedPath, manifest.version + '.json');
-                await fsp.writeFile(manifestPath, JSON.stringify(manifest, 4, 4), 'utf8');
+                await this.writeCacheFile(cacheRelativePath, manifest);
                 return manifest;
             }
         }
@@ -97,20 +104,21 @@ class ProjectFileSource {
     }
 
     async getItem(collectionId, itemId, itemVersion) {
-        const itemPath = path.join(
-            this.cachePath,
+        const cacheRelativePath = path.join(
             'collections',
             collectionId,
             `${itemId}-${itemVersion}.json`
         );
 
+        const fullItemPath = path.join(this.cachePath, cacheRelativePath);
+
         // first check the file cache
-        const json = await fsp.readFile(itemPath).catch(err => null);
+        const json = await fsp.readFile(fullItemPath).catch(err => null);
         if (json) {
             try {
                 return JSON.parse(json);
             } catch (error) {
-                console.error('error parsing item json at path: ' + itemPath);
+                console.error('error parsing item json at path: ' + cacheRelativePath);
                 console.error(error);
                 // suppress error because we can refetch the file and save.
             }
@@ -120,12 +128,8 @@ class ProjectFileSource {
         if (this.source) {
             const item = await this.source.getItem(collectionId, itemId, itemVersion);
             if (item) {
-                // ensure collections folder exists
-                const collectionPath = path.join(this.cachePath, 'collections', collectionId);
-                await fsp.mkdir(collectionPath, { recursive: true });
-
                 // cache item to file
-                await fsp.writeFile(itemPath, JSON.stringify(item, 4, 4), 'utf8');
+                await this.writeCacheFile(cacheRelativePath, item);
                 return item;
             }
         }
