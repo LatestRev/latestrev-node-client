@@ -15,7 +15,6 @@ class CmsSnapshot {
 
         this.manifest = manifest;
         this.source = source;
-        this._collectionsCache = {};
 
         // general purpose cache that can be used by clients that need to cache
         // computed results based on data fetched from the CMS
@@ -84,12 +83,6 @@ class CmsSnapshot {
     }
 
     async getItems(collectionId) {
-        // see if we have the cached item
-        const cachedItems = this._collectionsCache[collectionId];
-        if (cachedItems) {
-            return cachedItems;
-        }
-
         let items = [];
         const collectionItems = this.manifest.collections[collectionId];
         if (collectionItems) {
@@ -106,7 +99,6 @@ class CmsSnapshot {
 
             // remove any empty items
             items = fetchedItems.filter(item => !!item);
-            this._collectionsCache[collectionId] = items;
         }
 
         return items;
