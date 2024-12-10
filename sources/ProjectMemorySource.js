@@ -22,11 +22,16 @@ class ProjectMemorySource {
 
     async getPublishedRelease(version) {
         const cacheKey = version.toString();
-        const manifest = await this._manifestCache.ensure(cacheKey, () => {
-            return this.source ? this.source.getPublishedRelease(version) : null;
+        const manifest = await this._manifestCache.ensure(cacheKey, async () => {
+            if (this.source) {
+                // freeze the result to make sure it's not modified by the caller
+                const manifest = await this.source.getPublishedRelease(version);
+                return Object.freeze(manifest);
+            }
+            return null;
         });
-        // return a copy to make sure callers don't modify cached item
-        return structuredClone(manifest);
+
+        return manifest;
     }
 
     async getScheduledRelease(scheduledId) {
@@ -41,15 +46,16 @@ class ProjectMemorySource {
 
     async getItem(collectionId, itemId, itemVersion) {
         const cacheKey = `${collectionId}-${itemId}-${itemVersion}`;
-        const item = await this._itemCache.ensure(cacheKey, () => {
+        const item = await this._itemCache.ensure(cacheKey, async () => {
             if (this.source) {
-                return this.source.getItem(collectionId, itemId, itemVersion);
+                // freeze the result to make sure it's not modified by the caller
+                const item = await this.source.getItem(collectionId, itemId, itemVersion);
+                return Object.freeze(item);
             }
             return null;
         });
 
-        // return a copy to make sure callers don't modify cached item
-        return structuredClone(item);
+        return item;
     }
 }
 
