@@ -18,7 +18,7 @@ class CmsSnapshot {
 
         // general purpose cache that can be used by clients that need to cache
         // computed results based on data fetched from the CMS
-        this.cache = new MemoryCache();
+        this.cache = new MemoryCache({ defaultTTL: Number.MAX_SAFE_INTEGER });
     }
 
     getMediaUrl(mediaInfo) {
