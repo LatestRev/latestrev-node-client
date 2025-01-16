@@ -26,7 +26,7 @@ class ProjectMemorySource {
             if (this.source) {
                 // freeze the result to make sure it's not modified by the caller
                 const manifest = await this.source.getPublishedRelease(version);
-                return Object.freeze(manifest);
+                return deepFreeze(manifest);
             }
             return null;
         });
@@ -50,13 +50,29 @@ class ProjectMemorySource {
             if (this.source) {
                 // freeze the result to make sure it's not modified by the caller
                 const item = await this.source.getItem(collectionId, itemId, itemVersion);
-                return Object.freeze(item);
+                return deepFreeze(item);
             }
             return null;
         });
 
         return item;
     }
+}
+
+function deepFreeze(object) {
+    // Retrieve the property names defined on object
+    const propNames = Reflect.ownKeys(object);
+
+    // Freeze properties before freezing self
+    for (const name of propNames) {
+        const value = object[name];
+
+        if ((value && typeof value === 'object') || typeof value === 'function') {
+            deepFreeze(value);
+        }
+    }
+
+    return Object.freeze(object);
 }
 
 module.exports = ProjectMemorySource;
