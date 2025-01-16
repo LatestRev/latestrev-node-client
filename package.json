@@ -24,7 +24,7 @@
     "homepage": "https://github.com/LatestRev/latestrev-node-client#readme",
     "dependencies": {
         "@thinkpixellab-public/px-long-operations": "^1.0.0",
-        "agentkeepalive": "4.5",
+        "agentkeepalive": "4.6",
         "axios": "^1.7.9",
         "axios-retry": "4.5"
     }
