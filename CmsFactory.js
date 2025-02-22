@@ -43,8 +43,14 @@ class CmsFactory {
         return snapshot;
     }
 
-    async getPublished() {
-        return this._cache.ensureLazy('published', () => this.refreshPublished());
+    async getPublished(publishedId) {
+        // if no published version is provided, use the latest
+        if (!publishedId) {
+            return this._cache.ensureLazy('published', () => this.refreshPublished());
+        }
+
+        var manifest = await this.source.getPublishedRelease(publishedId);
+        return new CmsSnapshot(manifest, this.source);
     }
 
     async getScheduled(scheduledId) {
