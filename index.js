@@ -1,19 +1,21 @@
-const ProjectApiSource = require('./sources/ProjectApiSource');
-const ProjectFileSource = require('./sources/ProjectFileSource');
-const ProjectMemorySource = require('./sources/ProjectMemorySource');
-const CmsFactory = require('./CmsFactory');
+import ProjectApiSource from './sources/ProjectApiSource.js';
+import ProjectFileSource from './sources/ProjectFileSource.js';
+import ProjectMemorySource from './sources/ProjectMemorySource.js';
+import CmsFactory from './CmsFactory.js';
 
-module.exports = {
+import ProjectSnapshot from './CmsSnapshot.js';
+import Express from './express.js';
+
+export {
     // sources
     ProjectApiSource,
     ProjectFileSource,
     ProjectMemorySource,
+    ProjectSnapshot,
+    Express,
+};
 
-    ProjectSnapshot: require('./CmsSnapshot'),
-
-    Express: require('./express'),
-
-    createCmsFactory: function ({
+export function createCmsFactory({
         projectId,
         apiUrl,
         apiKey,
@@ -34,5 +36,4 @@ module.exports = {
         });
         const memorySource = new ProjectMemorySource(fileSource);
         return new CmsFactory(memorySource, publishedTTLSeconds);
-    },
-};
+    }

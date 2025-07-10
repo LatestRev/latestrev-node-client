@@ -1,6 +1,6 @@
-const fsp = require('fs').promises;
-const path = require('path');
-const chunkArray = require('../utils/chunkArray');
+import { promises as fsp } from 'fs';
+import path from 'path';
+import chunkArray from '../utils/chunkArray.js';
 
 // limit concurrency in parallel api calls
 const PARALLEL_API_CALL_LIMIT = 25;
@@ -138,4 +138,4 @@ class ProjectFileSource {
     }
 }
 
-module.exports = ProjectFileSource;
+export default ProjectFileSource;

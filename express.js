@@ -55,4 +55,4 @@ class Express {
     }
 }
 
-module.exports = Express;
+export default Express;

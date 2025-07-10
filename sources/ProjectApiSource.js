@@ -1,7 +1,6 @@
-const axios = require('axios');
-const axiosRetry = require('axios-retry').default;
-const KeepAliveAgent = require('agentkeepalive');
-const KeepAliveHttpsAgent = require('agentkeepalive').HttpsAgent;
+import axios from 'axios';
+import axiosRetry from 'axios-retry';
+import KeepAliveAgent, { HttpsAgent as KeepAliveHttpsAgent } from 'agentkeepalive';
 
 class ProjectClient {
     constructor({
@@ -69,4 +68,4 @@ class ProjectClient {
     }
 }
 
-module.exports = ProjectClient;
+export default ProjectClient;

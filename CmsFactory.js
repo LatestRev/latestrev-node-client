@@ -1,5 +1,5 @@
-const { MemoryCache } = require('@thinkpixellab-public/px-long-operations');
-const CmsSnapshot = require('./CmsSnapshot');
+import { MemoryCache } from '@thinkpixellab-public/px-long-operations';
+import CmsSnapshot from './CmsSnapshot.js';
 
 class CmsFactory {
     constructor(source, publishedTTLSeconds) {
@@ -64,4 +64,4 @@ class CmsFactory {
     }
 }
 
-module.exports = CmsFactory;
+export default CmsFactory;

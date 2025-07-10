@@ -1,4 +1,4 @@
-function chunkArray(items, chunkSize) {
+export default function chunkArray(items, chunkSize) {
     const res = [];
     for (let i = 0; i < items.length; i += chunkSize) {
         const chunk = items.slice(i, i + chunkSize);
@@ -6,5 +6,3 @@ function chunkArray(items, chunkSize) {
     }
     return res;
 }
-
-module.exports = chunkArray;

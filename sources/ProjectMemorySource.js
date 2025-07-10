@@ -1,4 +1,4 @@
-const { MemoryCache } = require('@thinkpixellab-public/px-long-operations');
+import { MemoryCache } from '@thinkpixellab-public/px-long-operations';
 
 class ProjectMemorySource {
     constructor(fallbackSource) {
@@ -75,4 +75,4 @@ function deepFreeze(object) {
     return Object.freeze(object);
 }
 
-module.exports = ProjectMemorySource;
+export default ProjectMemorySource;

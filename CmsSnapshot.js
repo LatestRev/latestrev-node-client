@@ -1,5 +1,5 @@
-const { MemoryCache } = require('@thinkpixellab-public/px-long-operations');
-const chunkArray = require('./utils/chunkArray');
+import { MemoryCache } from '@thinkpixellab-public/px-long-operations';
+import chunkArray from './utils/chunkArray.js';
 
 // limit concurrency in parallel api calls
 const PARALLEL_API_CALL_LIMIT = 25;
@@ -144,4 +144,4 @@ class CmsSnapshot {
     }
 }
 
-module.exports = CmsSnapshot;
+export default CmsSnapshot;
