@@ -4,7 +4,6 @@ import ProjectMemorySource from './sources/ProjectMemorySource.js';
 import CmsFactory from './CmsFactory.js';
 
 import ProjectSnapshot from './CmsSnapshot.js';
-import Express from './express.js';
 
 export {
     // sources
@@ -12,7 +11,6 @@ export {
     ProjectFileSource,
     ProjectMemorySource,
     ProjectSnapshot,
-    Express,
 };
 
 export function createCmsFactory({
