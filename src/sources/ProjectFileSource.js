@@ -20,7 +20,7 @@ class ProjectFileSource {
         await fsp.mkdir(folderPath, { recursive: true });
 
         // write the file to disk
-        await fsp.writeFile(fullPath, JSON.stringify(data, 4, 4), 'utf8');
+        await fsp.writeFile(fullPath, JSON.stringify(data, null, 4), 'utf8');
     }
 
     async getPublishedReleaseVersion(ignoreCache) {

@@ -11,7 +11,7 @@ class ProjectMemorySource {
 
     async getPublishedReleaseVersion(ignoreCache) {
         if (this.source && (ignoreCache || !this._publishedReleaseVersion)) {
-            var version = this.source.getPublishedReleaseVersion(ignoreCache);
+            var version = await this.source.getPublishedReleaseVersion(ignoreCache);
             if (version) {
                 this._publishedReleaseVersion = version;
             }
@@ -60,6 +60,10 @@ class ProjectMemorySource {
 }
 
 function deepFreeze(object) {
+    if (object == null || typeof object !== 'object') {
+        return object;
+    }
+
     // Retrieve the property names defined on object
     const propNames = Reflect.ownKeys(object);
 
