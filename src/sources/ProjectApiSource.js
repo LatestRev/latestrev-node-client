@@ -1,6 +1,4 @@
-import axios from 'axios';
-import axiosRetry from 'axios-retry';
-import KeepAliveAgent, { HttpsAgent as KeepAliveHttpsAgent } from 'agentkeepalive';
+import { Pool, RetryAgent } from 'undici';
 
 class ProjectClient {
     constructor({
@@ -20,51 +18,58 @@ class ProjectClient {
         }
 
         this.apiKey = apiKey;
-        this.projectId = projectId;
-        this.apiClient = axios.create({
-            baseURL: apiUrl + 'projects/' + this.projectId + '/',
-            timeout: timeout,
-            httpAgent: new KeepAliveAgent({ maxSockets }),
-            httpsAgent: new KeepAliveHttpsAgent({ maxSockets }),
+
+        // Parse origin and base path from the API URL
+        const url = new URL('projects/' + projectId + '/', apiUrl);
+        this._origin = url.origin;
+        this._basePath = url.pathname;
+
+        const pool = new Pool(this._origin, {
+            headersTimeout: timeout,
+            bodyTimeout: timeout,
+            connections: maxSockets,
         });
-        axiosRetry(this.apiClient, { retries: retries, retryDelay: axiosRetry.exponentialDelay });
+
+        this._client = new RetryAgent(pool, { maxRetries: retries });
     }
 
-    async _apiGetRequest(url) {
-        //console.log(`RevAPI: ` + url);
-        return this.apiClient.get(url, {
-            params: {
-                apiKey: this.apiKey,
-            },
+    async _apiGetRequest(relativeUrl) {
+        const path = this._basePath + relativeUrl + '?' + new URLSearchParams({ apiKey: this.apiKey });
+
+        const { statusCode, body } = await this._client.request({
+            method: 'GET',
+            path,
         });
+
+        if (statusCode < 200 || statusCode >= 300) {
+            const text = await body.text();
+            throw new Error(`API request failed: ${statusCode} ${path}\n${text}`);
+        }
+
+        return body.json();
     }
 
     async getPublishedReleaseVersion() {
-        const response = await this._apiGetRequest(`releases/published/latest`);
-        const releaseSummary = response.data;
+        const releaseSummary = await this._apiGetRequest('releases/published/latest');
         return releaseSummary ? releaseSummary.version : null;
     }
 
     async getPublishedRelease(version) {
-        const response = await this._apiGetRequest(`releases/published/${version}/manifest`);
-        return response.data;
+        return this._apiGetRequest(`releases/published/${version}/manifest`);
     }
 
     async getScheduledRelease(scheduledId) {
-        const response = await this._apiGetRequest(`releases/scheduled/${scheduledId}/manifest`);
-        return response.data;
+        return this._apiGetRequest(`releases/scheduled/${scheduledId}/manifest`);
     }
 
     async getSavedRelease() {
-        const response = await this._apiGetRequest(`releases/saved/manifest`);
-        return response.data;
+        return this._apiGetRequest('releases/saved/manifest');
     }
 
     async getItem(collectionId, itemId, itemVersion) {
-        const response = await this._apiGetRequest(
+        return this._apiGetRequest(
             `collections/${collectionId}/items/${itemId}/${itemVersion}`
         );
-        return response.data;
     }
 }
 

@@ -37,8 +37,6 @@
     "homepage": "https://github.com/LatestRev/latestrev-node-client#readme",
     "dependencies": {
         "@thinkpixellab-public/px-long-operations": "^2.0.1",
-        "agentkeepalive": "4.6",
-        "axios": "1.15",
-        "axios-retry": "^4.5.0"
+        "undici": "^8.0.2"
     }
 }
