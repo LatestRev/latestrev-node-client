@@ -27,7 +27,7 @@ class ProjectClient {
             httpAgent: new KeepAliveAgent({ maxSockets }),
             httpsAgent: new KeepAliveHttpsAgent({ maxSockets }),
         });
-        axiosRetry(axios, { retries: retries, retryDelay: axiosRetry.exponentialDelay });
+        axiosRetry(this.apiClient, { retries: retries, retryDelay: axiosRetry.exponentialDelay });
     }
 
     async _apiGetRequest(url) {

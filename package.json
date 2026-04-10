@@ -38,7 +38,7 @@
     "dependencies": {
         "@thinkpixellab-public/px-long-operations": "^2.0.1",
         "agentkeepalive": "4.6",
-        "axios": "1.10",
-        "axios-retry": "4.5"
+        "axios": "1.15",
+        "axios-retry": "^4.5.0"
     }
 }
