@@ -8,3 +8,7 @@
 # NodeJS modules
 node_modules
 /.claude/settings.local.json
+
+# Environment variables
+.env
+.env.local
