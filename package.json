@@ -38,7 +38,7 @@
     "homepage": "https://github.com/LatestRev/latestrev-node-client#readme",
     "dependencies": {
         "@thinkpixellab-public/px-long-operations": "^2.1.0",
-        "undici": "^8.1.0"
+        "undici": "^8.0.0"
     },
     "devDependencies": {
         "vitest": "^4.1.4"
