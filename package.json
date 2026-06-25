@@ -4,6 +4,7 @@
     "description": "LatestRev.com Node.js client",
     "main": "./index.js",
     "type": "module",
+    "packageManager": "pnpm@11.5.2",
     "exports": {
         ".": {
             "import": "./index.js",
@@ -18,7 +19,11 @@
     ],
     "scripts": {
         "test": "vitest run",
-        "test:watch": "vitest"
+        "test:watch": "vitest",
+        "format": "oxfmt --write .",
+        "format:check": "oxfmt --check .",
+        "lint": "oxlint",
+        "lint:fix": "oxlint --fix"
     },
     "repository": {
         "type": "git",
@@ -41,6 +46,9 @@
         "undici": "^8.0.0"
     },
     "devDependencies": {
+        "oxfmt": "^0.53.0",
+        "oxlint": "^1.68.0",
+        "vite": "^7.0.0",
         "vitest": "^4.1.4"
     }
 }

@@ -2,12 +2,17 @@
 [Tt]humbs.db
 *.DS_Store
 
-# VS code settings
-.vscode
+# VS code settings (track shared formatter config, ignore the rest)
+.vscode/*
+!.vscode/settings.json
 
 # NodeJS modules
 node_modules
 /.claude/settings.local.json
+
+# Package manager lockfiles other than pnpm's
+package-lock.json
+yarn.lock
 
 # Environment variables
 .env

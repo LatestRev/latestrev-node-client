@@ -1,0 +1,7 @@
+minimumReleaseAge: 5760 # 6h required, 4d wait for bugs & stability
+minimumReleaseAgeExclude:
+    - '@thinkpixellab/*'
+    - '@thinkpixellab-public/*'
+
+allowBuilds:
+    esbuild: true # needs its postinstall to fetch the platform binary
