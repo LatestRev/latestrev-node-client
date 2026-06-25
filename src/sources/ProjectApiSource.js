@@ -34,7 +34,8 @@ class ProjectClient {
     }
 
     async _apiGetRequest(relativeUrl) {
-        const path = this._basePath + relativeUrl + '?' + new URLSearchParams({ apiKey: this.apiKey });
+        const path =
+            this._basePath + relativeUrl + '?' + new URLSearchParams({ apiKey: this.apiKey });
 
         const { statusCode, body } = await this._client.request({
             method: 'GET',
@@ -67,9 +68,7 @@ class ProjectClient {
     }
 
     async getItem(collectionId, itemId, itemVersion) {
-        return this._apiGetRequest(
-            `collections/${collectionId}/items/${itemId}/${itemVersion}`
-        );
+        return this._apiGetRequest(`collections/${collectionId}/items/${itemId}/${itemVersion}`);
     }
 }
 

@@ -88,7 +88,7 @@ describe('CmsSnapshot', () => {
                 const result = await snapshot.getLocalizedString(
                     collectionIds[0],
                     'nonexistent-item',
-                    'en'
+                    'en',
                 );
                 expect(result).toBe('nonexistent-item');
             }
@@ -102,7 +102,7 @@ describe('CmsSnapshot', () => {
                     'nonexistent-item',
                     'en',
                     true,
-                    false
+                    false,
                 );
                 expect(result).toBeNull();
             }

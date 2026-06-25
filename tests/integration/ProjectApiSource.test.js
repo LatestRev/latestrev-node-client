@@ -22,7 +22,7 @@ describe('ProjectApiSource', () => {
 
         it('should throw if apiKey is missing', () => {
             expect(() => new ProjectApiSource({ projectId: 'test' })).toThrow(
-                'Missing project API key'
+                'Missing project API key',
             );
         });
     });
@@ -54,7 +54,7 @@ describe('ProjectApiSource', () => {
 
             // find the first collection with at least one item
             const collectionId = Object.keys(manifest.collections).find(
-                id => Object.keys(manifest.collections[id]).length > 0
+                id => Object.keys(manifest.collections[id]).length > 0,
             );
 
             if (collectionId) {

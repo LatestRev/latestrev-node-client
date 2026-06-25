@@ -41,7 +41,7 @@ class ProjectFileSource {
         const allFiles = await fsp.readdir(publishedPath).catch(err => []);
         const manifestFiles = allFiles.filter(file => path.extname(file).toLowerCase() === '.json');
         const manifestVersions = manifestFiles.map(filename =>
-            parseInt(filename.replace('.json', ''), 10)
+            parseInt(filename.replace('.json', ''), 10),
         );
 
         manifestVersions.sort((a, b) => {
@@ -76,13 +76,13 @@ class ProjectFileSource {
                 for (const [collectionId, itemVersions] of Object.entries(manifest.collections)) {
                     for (const idVersionPairs of chunkArray(
                         Object.entries(itemVersions),
-                        PARALLEL_API_CALL_LIMIT
+                        PARALLEL_API_CALL_LIMIT,
                     )) {
                         // get cached versions for set of items in parallel
                         await Promise.all(
                             idVersionPairs.map(([itemId, itemVersion]) =>
-                                this.getItem(collectionId, itemId, itemVersion)
-                            )
+                                this.getItem(collectionId, itemId, itemVersion),
+                            ),
                         );
                     }
                 }
@@ -107,7 +107,7 @@ class ProjectFileSource {
         const cacheRelativePath = path.join(
             'collections',
             collectionId,
-            `${itemId}-${itemVersion}.json`
+            `${itemId}-${itemVersion}.json`,
         );
 
         const fullItemPath = path.join(this.cachePath, cacheRelativePath);

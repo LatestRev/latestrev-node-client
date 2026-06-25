@@ -14,7 +14,7 @@ class CmsFactory {
 
         // fetch the latest version, ignoring cache
         var publishedVersion = await this.source.getPublishedReleaseVersion(
-            true /* ignore cache */
+            true /* ignore cache */,
         );
 
         // if version hasn't changed, we are fine to continue using existing CMS instance

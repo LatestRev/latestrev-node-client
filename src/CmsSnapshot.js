@@ -92,7 +92,7 @@ class CmsSnapshot {
             let fetchedItems = [];
             for (const idChunks of chunkArray(itemIds, PARALLEL_API_CALL_LIMIT)) {
                 const chunkItems = await Promise.all(
-                    idChunks.map(itemId => this.getItem(collectionId, itemId))
+                    idChunks.map(itemId => this.getItem(collectionId, itemId)),
                 );
                 fetchedItems = fetchedItems.concat(chunkItems);
             }
@@ -109,7 +109,7 @@ class CmsSnapshot {
         itemId,
         locale,
         fallbackToSource = true,
-        fallbackToId = true
+        fallbackToId = true,
     ) {
         let result = null;
 

@@ -14,24 +14,24 @@ export {
 };
 
 export function createCmsFactory({
-        projectId,
-        apiUrl,
-        apiKey,
-        cachePath,
-        writeCacheFile,
-        publishedTTLSeconds,
-    }) {
-        const apiSource = new ProjectApiSource({
-            projectId: projectId,
-            apiUrl: apiUrl,
-            apiKey: apiKey,
-        });
+    projectId,
+    apiUrl,
+    apiKey,
+    cachePath,
+    writeCacheFile,
+    publishedTTLSeconds,
+}) {
+    const apiSource = new ProjectApiSource({
+        projectId: projectId,
+        apiUrl: apiUrl,
+        apiKey: apiKey,
+    });
 
-        const fileSource = new ProjectFileSource({
-            cachePath,
-            fallbackSource: apiSource,
-            writeCacheFile,
-        });
-        const memorySource = new ProjectMemorySource(fileSource);
-        return new CmsFactory(memorySource, publishedTTLSeconds);
-    }
+    const fileSource = new ProjectFileSource({
+        cachePath,
+        fallbackSource: apiSource,
+        writeCacheFile,
+    });
+    const memorySource = new ProjectMemorySource(fileSource);
+    return new CmsFactory(memorySource, publishedTTLSeconds);
+}
