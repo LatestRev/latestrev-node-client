@@ -56,11 +56,13 @@ class ProjectClient {
     }
 
     async getPublishedRelease(version) {
-        return this._apiGetRequest(`releases/published/${version}/manifest`);
+        return this._apiGetRequest(`releases/published/${encodeURIComponent(version)}/manifest`);
     }
 
     async getScheduledRelease(scheduledId) {
-        return this._apiGetRequest(`releases/scheduled/${scheduledId}/manifest`);
+        return this._apiGetRequest(
+            `releases/scheduled/${encodeURIComponent(scheduledId)}/manifest`,
+        );
     }
 
     async getSavedRelease() {
@@ -68,7 +70,12 @@ class ProjectClient {
     }
 
     async getItem(collectionId, itemId, itemVersion) {
-        return this._apiGetRequest(`collections/${collectionId}/items/${itemId}/${itemVersion}`);
+        // Encode each segment: ids/versions flow from caller and CMS content, so
+        // a stray space or unicode char would otherwise make undici reject the
+        // request path ("invalid request path") or allow path-segment injection.
+        return this._apiGetRequest(
+            `collections/${encodeURIComponent(collectionId)}/items/${encodeURIComponent(itemId)}/${encodeURIComponent(itemVersion)}`,
+        );
     }
 }
 
