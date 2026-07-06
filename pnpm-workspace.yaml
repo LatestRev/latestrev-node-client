@@ -1,7 +1,6 @@
-minimumReleaseAge: 5760 # 6h required, 4d wait for bugs & stability
+minimumReleaseAge: 10080 # 7 days — mirror the Azure Artifacts feed's minimum age
 minimumReleaseAgeExclude:
     - '@thinkpixellab/*'
-    - '@thinkpixellab-public/*'
 
 allowBuilds:
     esbuild: true # needs its postinstall to fetch the platform binary
