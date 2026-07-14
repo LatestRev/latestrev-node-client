@@ -39,7 +39,7 @@ if [ -n "$lint_changed" ] && [ -x "$oxlint" ]; then
   if ! "$oxlint" "$@"; then
     echo ""
     echo "ERROR: oxlint found an error in staged files. Fix it (or run"
-    echo "'pnpm lint' for auto-fixable issues), then re-stage and commit."
+    echo "'pnpm lint:fix' for auto-fixable issues), then re-stage and commit."
     echo ""
     exit 1
   fi
