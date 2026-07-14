@@ -1,0 +1,48 @@
+#!/bin/sh
+# pre-commit: block the commit if staged source files aren't oxfmt-formatted
+# or if oxlint reports an error. Warnings are advisory and don't block.
+# Auto-wired via the package.json "prepare" script (sets core.hooksPath).
+
+oxfmt="node_modules/.bin/oxfmt"
+oxlint="node_modules/.bin/oxlint"
+
+# Files oxfmt knows how to format (broad: includes css/scss/yaml/etc).
+fmt_changed=$(git diff --cached --name-only --diff-filter=ACMR \
+  | grep -iE '\.(m?[jt]sx?|c[jt]s|vue|svelte|astro|json5?|jsonc|css|scss|less|ya?ml|html?|mdx?|graphql|toml)$')
+
+# Files oxlint can lint (JS/TS/Vue/Svelte/Astro only).
+lint_changed=$(git diff --cached --name-only --diff-filter=ACMR \
+  | grep -iE '\.(m?[jt]sx?|c[jt]s|vue|svelte|astro)$')
+
+# --- oxfmt: block on exit 1 (needs formatting); 0 clean, 2 nothing to check ---
+if [ -n "$fmt_changed" ] && [ -x "$oxfmt" ]; then
+  IFS='
+'
+  set -- $fmt_changed
+  unset IFS
+  "$oxfmt" --check "$@"
+  if [ "$?" -eq 1 ]; then
+    echo ""
+    echo "ERROR: staged files are not oxfmt-formatted. Run your format script"
+    echo "(e.g. 'pnpm format' or 'npm run format'), then re-stage and commit."
+    echo ""
+    exit 1
+  fi
+fi
+
+# --- oxlint: block only on errors (non-zero exit); warnings are advisory ---
+if [ -n "$lint_changed" ] && [ -x "$oxlint" ]; then
+  IFS='
+'
+  set -- $lint_changed
+  unset IFS
+  if ! "$oxlint" "$@"; then
+    echo ""
+    echo "ERROR: oxlint found an error in staged files. Fix it (or run"
+    echo "'pnpm lint' for auto-fixable issues), then re-stage and commit."
+    echo ""
+    exit 1
+  fi
+fi
+
+exit 0
